@@ -53,13 +53,31 @@
 
       function logOut() {}
 
-      function closed() {}
+      function closed() {
+        liff.closeWindow();
+      }
 
-      async function scanCode() {}
+      async function scanCode() {
+        const result = await lift.scanCode();
+        document.getElementById("scanCode").append(result.value);
+      }
 
-      function openWindow() {}
+      function openWindow() {
+        liff.openWindow({
+          url: "https://line.me",
+          external: true,
+        });
+      }
 
-      async function getFriendship() {}
+      async function getFriendship() {
+        const friend = await lift.getFriendship();
+        document.getElementById("friendship").append(friend.friendFlag);
+        if (!friend.friendFlag) {
+          if (confirm("...")) {
+            window.location = "";
+          }
+        }
+      }
 
       async function sendMsg() {
         if (liff.getContext().type !== "none") {
@@ -106,11 +124,16 @@
 
       async function main() {
         await liff.init({ liffId: "1656692707-p5OagMYD" });
-        getEnvironment();
-        getUserProfile();
-        getContext();
-        // getFriendship()
-        // createUniversalLink()
+        document.getElementById("isLoggenIn").append(liff.isLoggedIn());
+        if (liff.isLoggedIn()) {
+          getEnvironment();
+          getUserProfile();
+          getContext();
+          // getFriendship();
+          // createUniversalLink()
+        } else {
+          liff.login();
+        }
       }
       main();
     </script>
